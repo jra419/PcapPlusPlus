@@ -293,6 +293,11 @@ namespace pcpp
 	const ProtocolType WakeOnLan = 0x200000000000;
 
 	/**
+	 * Peregrine Protocol
+	 */
+	const ProtocolType Peregrine = 0xfd;
+
+	/**
 	 * An enum representing OSI model layers
 	 */
 	enum OsiModelLayer

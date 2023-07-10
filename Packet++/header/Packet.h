@@ -1,8 +1,10 @@
 #ifndef PACKETPP_PACKET
 #define PACKETPP_PACKET
 
+#include "ProtocolType.h"
 #include "RawPacket.h"
 #include "Layer.h"
+#include <bits/stdint-uintn.h>
 #include <vector>
 
 /// @file
@@ -291,6 +293,10 @@ namespace pcpp
 		 * @return True if the packet contains the protocol, false otherwise
 		 */
 		bool isPacketOfType(ProtocolType protocolType) const { return m_ProtocolTypes & protocolType; }
+
+		uint64_t getM_ProtocolTypes() const { return m_ProtocolTypes; }
+
+		ProtocolType getProtocolType(ProtocolType protocolType) const { return protocolType; }
 
 		/**
 		 * Each layer can have fields that can be calculate automatically from other fields using Layer#computeCalculateFields(). This method forces all layers to calculate these

@@ -80,6 +80,7 @@ namespace pcpp
 		PcapLogModuleDpdkDevice, ///< DpdkDevice module (Pcap++)
 		PcapLogModuleKniDevice, ///< KniDevice module (Pcap++)
 		NetworkUtils, ///< NetworkUtils module (Pcap++)
+		PacketLogModulePeregrineLayer, ///< Peregrine module (Packet++)
 		NumOfLogModules
 	};
 
