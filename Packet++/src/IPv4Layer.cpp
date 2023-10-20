@@ -14,7 +14,6 @@
 #include <sstream>
 #include "Logger.h"
 #include "EndianPortable.h"
-#include "PeregrineLayer.h"
 
 namespace pcpp
 {
@@ -327,11 +326,6 @@ void IPv4Layer::parseNextLayer()
 			? static_cast<Layer*>(new IPv6Layer(payload, payloadLen, this, m_Packet))
 			: static_cast<Layer*>(new PayloadLayer(payload, payloadLen, this, m_Packet));
 		break;
-	case PACKETPP_IPPROTO_PEREGRINE:
-		m_NextLayer = PeregrineLayer::isDataValid(payload, payloadLen)
-			? static_cast<Layer*>(new PeregrineLayer(payload, payloadLen, this, m_Packet))
-			: static_cast<Layer*>(new PayloadLayer(payload, payloadLen, this, m_Packet));
-		break;
 	default:
 		m_NextLayer = new PayloadLayer(payload, payloadLen, this, m_Packet);
 	}
@@ -365,9 +359,6 @@ void IPv4Layer::computeCalculateFields()
 		case IGMPv2:
 		case IGMPv3:
 			ipHdr->protocol = PACKETPP_IPPROTO_IGMP;
-			break;
-		case Peregrine:
-			ipHdr->protocol = PACKETPP_IPPROTO_PEREGRINE;
 			break;
 		default:
 			break;

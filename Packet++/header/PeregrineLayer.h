@@ -19,10 +19,40 @@ namespace pcpp
 	 */
 #pragma pack(push, 1)
 	struct peregrinehdr {
-		uint32_t	ipSrcAddr;
-		uint8_t		ipProto;
-		uint32_t	length;
-		uint64_t	timestamp;
+		uint32_t 	decay;
+		uint32_t 	macIpSrcPktCnt;
+		uint32_t 	macIpSrcPktLen;
+		uint32_t 	macIpSrcSs;
+		uint32_t 	macIpSrcMean;
+		uint32_t 	macIpSrcStdDev;
+		uint32_t 	ipSrcTsDiff;
+		uint32_t 	ipSrcPktCnt;
+		uint32_t 	ipSrcPktLen;
+		uint32_t 	ipSrcSs;
+		uint32_t 	ipSrcMean;
+		uint32_t 	ipSrcStdDev;
+		uint32_t 	ipPktCnt;
+		uint32_t 	ipSs0;
+		uint32_t 	ipSs1;
+		uint32_t 	ipMean0;
+		uint32_t 	ipPktCnt1;
+		uint32_t 	ipMean1;
+		uint32_t 	ipStdDev0;
+		uint32_t 	ipMagnitude;
+		uint32_t 	ipRadius;
+		uint32_t 	fiveTPktCnt;
+		uint32_t 	fiveTSs0;
+		uint32_t 	fiveTSs1;
+		uint32_t 	fiveTMean0;
+		uint32_t 	fiveTPktCnt1;
+		uint32_t 	fiveTMean1;
+		uint32_t 	fiveTStdDev0;
+		uint32_t 	fiveTMagnitude;
+		uint32_t 	fiveTRadius;
+		uint64_t 	ipSumResProdCov;
+		uint64_t 	ipPcc;
+		uint64_t 	fiveTSumResProdCov;
+		uint64_t 	fiveTPcc;
 	};
 #pragma pack(pop)
 
@@ -56,28 +86,42 @@ namespace pcpp
 			return (peregrinehdr*)m_Data;
 		}
 
-		/**
-		* @return IpSrcAddr
-		*/
-		/* uint32_t getIpSrcAddr() const; */
-		IPv4Address getIpSrcAddr() const {
-			return getPeregrineHeader()->ipSrcAddr;
-		}
+		// return hdr fields
 
-		/**
-		* @return IpProto
-		*/
-		uint8_t getIpProto() const;
-
-		/**
-		* @return length
-		*/
-		uint32_t getLength() const;
-
-		/**
-		* @return timestamp
-		*/
-		uint64_t getTimestamp() const;
+		uint32_t getDecay() const;
+		uint32_t getMacIpSrcPktCnt() const;
+		uint32_t getMacIpSrcPktLen() const;
+		uint32_t getMacIpSrcSs() const;
+		uint32_t getMacIpSrcMean() const;
+		uint32_t getMacIpSrcStdDev() const;
+		uint32_t getIpSrcTsDiff() const;
+		uint32_t getIpSrcPktCnt() const;
+		uint32_t getIpSrcPktLen() const;
+		uint32_t getIpSrcSs() const;
+		uint32_t getIpSrcMean() const;
+		uint32_t getIpSrcStdDev() const;
+		uint32_t getIpPktCnt() const;
+		uint32_t getIpSs0() const;
+		uint32_t getIpSs1() const;
+		uint32_t getIpMean0() const;
+		uint32_t getIpPktCnt1() const;
+		uint32_t getIpMean1() const;
+		uint32_t getIpStdDev0() const;
+		uint32_t getIpMagnitude() const;
+		uint32_t getIpRadius() const;
+		uint32_t getFiveTPktCnt() const;
+		uint32_t getFiveTSs0() const;
+		uint32_t getFiveTSs1() const;
+		uint32_t getFiveTMean0() const;
+		uint32_t getFiveTPktCnt1() const;
+		uint32_t getFiveTMean1() const;
+		uint32_t getFiveTStdDev0() const;
+		uint32_t getFiveTMagnitude() const;
+		uint32_t getFiveTRadius() const;
+		uint64_t getIpSumResProdCov() const;
+		uint64_t getIpPcc() const;
+		uint64_t getFiveTSumResProdCov() const;
+		uint64_t getFiveTPcc() const;
 
 		// implement abstract methods
 

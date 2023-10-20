@@ -8,6 +8,7 @@
 #include <sstream>
 #include <string.h>
 #include "EndianPortable.h"
+#include "PeregrineLayer.h"
 
 namespace pcpp
 {
@@ -556,22 +557,11 @@ void IcmpLayer::parseNextLayer()
 {
 	size_t headerLen = getHeaderLen();
 
-	switch (getMessageType())
-	{
-	case ICMP_DEST_UNREACHABLE:
-	case ICMP_SOURCE_QUENCH:
-	case ICMP_TIME_EXCEEDED:
-	case ICMP_REDIRECT:
-	case ICMP_PARAM_PROBLEM:
-		m_NextLayer = IPv4Layer::isDataValid(m_Data + headerLen, m_DataLen - headerLen)
-			? static_cast<Layer*>(new IPv4Layer(m_Data + headerLen, m_DataLen - headerLen, this, m_Packet))
+	m_NextLayer = PeregrineLayer::isDataValid(m_Data + headerLen, m_DataLen - headerLen)
+			? static_cast<Layer*>(new PeregrineLayer(m_Data + headerLen, m_DataLen - headerLen, this, m_Packet))
 			: static_cast<Layer*>(new PayloadLayer(m_Data + headerLen, m_DataLen - headerLen, this, m_Packet));
-		return;
-	default:
-		if (m_DataLen > headerLen)
-			m_NextLayer = new PayloadLayer(m_Data + headerLen, m_DataLen - headerLen, this, m_Packet);
-		return;
-	}
+
+	return;
 }
 
 size_t IcmpLayer::getHeaderLen() const

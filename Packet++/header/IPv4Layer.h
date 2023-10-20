@@ -100,8 +100,6 @@ namespace pcpp
 		PACKETPP_IPPROTO_NONE = 59,
 		/** IPv6 Destination options		*/
 		PACKETPP_IPPROTO_DSTOPTS = 60,
-		/** Peregrine*/
-		PACKETPP_IPPROTO_PEREGRINE = 253,
 		/** Raw IP packets			*/
 		PACKETPP_IPPROTO_RAW = 255,
 		/** Maximum value */

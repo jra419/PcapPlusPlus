@@ -18,6 +18,7 @@
 #include "Logger.h"
 #include <string.h>
 #include <sstream>
+#include "PeregrineLayer.h"
 
 namespace pcpp
 {
@@ -355,41 +356,9 @@ void TcpLayer::parseNextLayer()
 	uint16_t portDst = getDstPort();
 	uint16_t portSrc = getSrcPort();
 
-	if (HttpMessage::isHttpPort(portDst) && HttpRequestFirstLine::parseMethod((char*)payload, payloadLen) != HttpRequestLayer::HttpMethodUnknown)
-		m_NextLayer = new HttpRequestLayer(payload, payloadLen, this, m_Packet);
-	else if (HttpMessage::isHttpPort(portSrc) && HttpResponseFirstLine::parseStatusCode((char*)payload, payloadLen) != HttpResponseLayer::HttpStatusCodeUnknown)
-		m_NextLayer = new HttpResponseLayer(payload, payloadLen, this, m_Packet);
-	else if (SSLLayer::IsSSLMessage(portSrc, portDst, payload, payloadLen))
-		m_NextLayer = SSLLayer::createSSLMessage(payload, payloadLen, this, m_Packet);
-	else if (SipLayer::isSipPort(portDst) || SipLayer::isSipPort(portSrc))
-	{
-		if (SipRequestFirstLine::parseMethod((char*)payload, payloadLen) != SipRequestLayer::SipMethodUnknown)
-			m_NextLayer = new SipRequestLayer(payload, payloadLen, this, m_Packet);
-		else if (SipResponseFirstLine::parseStatusCode((char*)payload, payloadLen) != SipResponseLayer::SipStatusCodeUnknown)
-			m_NextLayer = new SipResponseLayer(payload, payloadLen, this, m_Packet);
-		else
-			m_NextLayer = new PayloadLayer(payload, payloadLen, this, m_Packet);
-	}
-	else if (BgpLayer::isBgpPort(portSrc, portDst))
-	{
-		m_NextLayer = BgpLayer::parseBgpLayer(payload, payloadLen, this, m_Packet);
-		if (!m_NextLayer)
-			m_NextLayer = new PayloadLayer(payload, payloadLen, this, m_Packet);
-	}
-	else if (SSHLayer::isSSHPort(portSrc, portDst))
-		m_NextLayer = SSHLayer::createSSHMessage(payload, payloadLen, this, m_Packet);
-	else if (DnsLayer::isDataValid(payload, payloadLen, true) && (DnsLayer::isDnsPort(portDst) || DnsLayer::isDnsPort(portSrc)))
-		m_NextLayer = new DnsOverTcpLayer(payload, payloadLen, this, m_Packet);
-	else if (TelnetLayer::isDataValid(payload, payloadLen) && (TelnetLayer::isTelnetPort(portDst) || TelnetLayer::isTelnetPort(portSrc)))
-		m_NextLayer = new TelnetLayer(payload, payloadLen, this, m_Packet);
-	else if (FtpLayer::isFtpPort(portSrc) && FtpLayer::isDataValid(payload, payloadLen))
-		m_NextLayer = new FtpResponseLayer(payload, payloadLen, this, m_Packet);
-	else if (FtpLayer::isFtpPort(portDst) && FtpLayer::isDataValid(payload, payloadLen))
-		m_NextLayer = new FtpRequestLayer(payload, payloadLen, this, m_Packet);
-	else if (SomeIpLayer::isSomeIpPort(portSrc) || SomeIpLayer::isSomeIpPort(portDst))
-		m_NextLayer = SomeIpLayer::parseSomeIpLayer(payload, payloadLen, this, m_Packet);
-	else
-		m_NextLayer = new PayloadLayer(payload, payloadLen, this, m_Packet);
+	m_NextLayer = PeregrineLayer::isDataValid(payload, payloadLen)
+			? static_cast<Layer*>(new PeregrineLayer(payload, payloadLen, this, m_Packet))
+			: static_cast<Layer*>(new PayloadLayer(payload, payloadLen, this, m_Packet));
 }
 
 void TcpLayer::computeCalculateFields()
